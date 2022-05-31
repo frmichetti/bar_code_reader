@@ -74,11 +74,18 @@ const parsePDF = (filePath: string): Promise<any> => {
                 resolve({parsed, bankCode})            
             } else if (item.text) {
                 console.log(item.text)
-                parsed.push(item.text)                
+                parsed.push(item.text) 
                 
-                if (new RegExp(/\d{5}.\d{5} \d{5}.\d{6} \d{5}.\d{6} \d \d{14}/).test(item.text)){
-                    bankCode = item.text
-                }
+                // Remove additional spaces  
+                const s = item.text.replace(/\s\s+/g, ' ')                             
+                
+                if (new RegExp(/\d{5}.\d{5} \d{5}.\d{6} \d{5}.\d{6} \d \d{14}/).test(s)){
+                    bankCode = s
+                } else if(new RegExp(/\d{11}-\d \d{11}-\d \d{11}-\d \d{11}-\d/).test(s)){
+                    bankCode = s
+                } else if (new RegExp(/\d{12} \d{12} \d{12} \d{12}/).test(s)){
+                    bankCode = s
+                } 
             }
         });
     })
