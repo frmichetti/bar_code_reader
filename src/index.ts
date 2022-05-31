@@ -53,30 +53,17 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
     if (!file) {
         res.status(400).send({ msg: "file is not defined" })
     } else {
-        let parsed: Array<string> = await parsePDF(`${file.destination}${file.filename}`)
-        res.status(200).send({ data: parsed })
+        let result =  await parsePDF(`${file.destination}${file.filename}`)
+        res.status(200).send({ rawData: result.parsed, bankCode: result.bankCode })
     }
 });
 
-const parsePDF = (filePath: string): Promise<Array<string>> => {
+const parsePDF = (filePath: string): Promise<any> => {
     return new Promise((resolve, reject) => {
         const { PdfReader, Rule } = require("pdfreader");
         
         let parsed: Array<string> = [];
-
-        const displayValue = (value: any) => {
-            console.log("REGEX MATCH")
-            console.log(value)
-        }
-
-        const processItem = Rule.makeItemProcessor([
-            Rule.on(/\d{5}.\d{5} \d{5}.\d{6} \d{5}.\d{6} \d \d{14}/)
-                .extractRegexpValues()
-                .then(displayValue),
-            Rule.on(/\d{11}-\d{1} \d{11}-\d{1} \d{11}-\d{1} \d{11}-\d{1}/)
-              .extractRegexpValues()
-              .then(displayValue)            
-          ]);
+        let bankCode: String;             
         
         new PdfReader().parseFileItems(filePath, (err: any, item: any) => {
             if (err) {
@@ -84,11 +71,14 @@ const parsePDF = (filePath: string): Promise<Array<string>> => {
                 reject(err)
             } else if (!item) {
                 console.warn("end of file");
-                resolve(parsed)            }
-            else if (item.text) {
+                resolve({parsed, bankCode})            
+            } else if (item.text) {
                 console.log(item.text)
                 parsed.push(item.text)                
-                console.log(processItem(item.text))
+                
+                if (new RegExp(/\d{5}.\d{5} \d{5}.\d{6} \d{5}.\d{6} \d \d{14}/).test(item.text)){
+                    bankCode = item.text
+                }
             }
         });
     })
