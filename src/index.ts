@@ -87,8 +87,7 @@ const parsePDF = (filePath: string): Promise<Array<string>> => {
                 resolve(parsed)            }
             else if (item.text) {
                 console.log(item.text)
-                parsed.push(item.text)
-                console.log("Process ITEM ::::")
+                parsed.push(item.text)                
                 console.log(processItem(item.text))
             }
         });
