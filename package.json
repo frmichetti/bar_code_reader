@@ -1,5 +1,5 @@
 {
-  "name": "type-boot",
+  "name": "bar_code_reader",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -24,7 +24,10 @@
     "axios": "^0.26.1",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.0",
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "multer": "^1.4.5-lts.1",
+    "pdfreader": "^2.0.0"
   }
 }
