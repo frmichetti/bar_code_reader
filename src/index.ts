@@ -60,9 +60,23 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
 
 const parsePDF = (filePath: string): Promise<Array<string>> => {
     return new Promise((resolve, reject) => {
-        const { PdfReader } = require("pdfreader");
+        const { PdfReader, Rule } = require("pdfreader");
         
         let parsed: Array<string> = [];
+
+        const displayValue = (value: any) => {
+            console.log("REGEX MATCH")
+            console.log(value)
+        }
+
+        const processItem = Rule.makeItemProcessor([
+            Rule.on(/\d{5}.\d{5} \d{5}.\d{6} \d{5}.\d{6} \d \d{14}/)
+                .extractRegexpValues()
+                .then(displayValue),
+            Rule.on(/\d{11}-\d{1} \d{11}-\d{1} \d{11}-\d{1} \d{11}-\d{1}/)
+              .extractRegexpValues()
+              .then(displayValue)            
+          ]);
         
         new PdfReader().parseFileItems(filePath, (err: any, item: any) => {
             if (err) {
@@ -74,6 +88,8 @@ const parsePDF = (filePath: string): Promise<Array<string>> => {
             else if (item.text) {
                 console.log(item.text)
                 parsed.push(item.text)
+                console.log("Process ITEM ::::")
+                console.log(processItem(item.text))
             }
         });
     })
