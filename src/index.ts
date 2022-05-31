@@ -83,7 +83,9 @@ const parsePDF = (filePath: string): Promise<any> => {
                     bankCode = s
                 } else if (new RegExp(/\d{12} \d{12} \d{12} \d{12}/).test(s)){
                     bankCode = s
-                } 
+                } else{
+                    bankCode = "Not Found"
+                }
             }
         });
     })
