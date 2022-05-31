@@ -43,9 +43,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
-app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
-
-    const { PdfReader } = require("pdfreader");
+app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {    
 
     //@ts-ignore
     const file = req.file ?? null
@@ -60,7 +58,7 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
 
 const parsePDF = (filePath: string): Promise<any> => {
     return new Promise((resolve, reject) => {
-        const { PdfReader, Rule } = require("pdfreader");
+        const { PdfReader } = require("pdfreader");
         
         let parsed: Array<string> = [];
         let bankCode: String;             
