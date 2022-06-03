@@ -43,7 +43,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Express + TypeScript Server');
 });
 
-app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {    
+app.post('/scan', upload.single('file'), async (req: Request, res: Response) => {    
 
     //@ts-ignore
     const file = req.file ?? null
@@ -55,6 +55,20 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
         res.status(200).send({ rawData: result.parsed, bankCode: result.bankCode })
     }
 });
+
+/*
+app.post('/convert', upload.single('file'), async (req: Request, res: Response) => {    
+
+    //@ts-ignore
+    const file = req.file ?? null
+
+    if (!file) {
+        res.status(400).send({ msg: "file is not defined" })
+    } else {
+        
+    }
+});
+*/
 
 const parsePDF = (filePath: string): Promise<any> => {
     return new Promise((resolve, reject) => {
