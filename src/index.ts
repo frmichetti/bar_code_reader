@@ -2,6 +2,8 @@ import 'dotenv/config';
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
+import * as path from 'path'
+import javascriptBarcodeReader from 'javascript-barcode-reader'
 
 const app: Express = express();
 const port = process.env.PORT || 4000;
@@ -56,8 +58,8 @@ app.post('/scan', upload.single('file'), async (req: Request, res: Response) => 
     }
 });
 
-/*
-app.post('/convert', upload.single('file'), async (req: Request, res: Response) => {    
+
+app.post('/barcode', upload.single('file'), async (req: Request, res: Response) => {    
 
     //@ts-ignore
     const file = req.file ?? null
@@ -65,10 +67,25 @@ app.post('/convert', upload.single('file'), async (req: Request, res: Response) 
     if (!file) {
         res.status(400).send({ msg: "file is not defined" })
     } else {
+        try {
+            const result = await javascriptBarcodeReader({
+                image: path.resolve(`${file.destination}${file.filename}`),
+                barcode: 'code-2of5',
+                barcodeType: 'interleaved',
+                options: {    
+                    useAdaptiveThreshold: true, // for images with sahded portions
+                    singlePass: false
+                  }
+              })
+              res.status(200).send({bankCode: result})    
+        } catch (error) {
+            console.error(error)
+            res.status(200).send({bankCode: null})    
+        }
         
     }
 });
-*/
+
 
 const parsePDF = (filePath: string): Promise<any> => {
     return new Promise((resolve, reject) => {

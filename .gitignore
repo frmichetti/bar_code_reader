@@ -276,3 +276,6 @@ dist
 
 *.json
 uploads/*.pdf
+uploads/*.png
+uploads/*.jpg
+uploads/*.jpeg
