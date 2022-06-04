@@ -279,3 +279,5 @@ uploads/*.pdf
 uploads/*.png
 uploads/*.jpg
 uploads/*.jpeg
+
+.idea
