@@ -1,5 +1,5 @@
 {
-  "name": "type-boot",
+  "name": "node_bar_code_reader",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -13,12 +13,23 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.25",
     "node-ts": "^5.1.2",
     "nodemon": "^2.0.15",
     "typescript": "^4.6.3"
   },
   "dependencies": {
     "axios": "^0.26.1",
-    "dotenv": "^16.0.0"
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "javascript-barcode-reader": "^0.6.9",
+    "multer": "^1.4.5-lts.1",
+    "pdf2pic": "^2.1.4",
+    "pdfreader": "^2.0.0"
   }
 }
