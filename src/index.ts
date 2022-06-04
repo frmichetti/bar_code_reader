@@ -3,6 +3,7 @@ import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from "body-parser";
 import * as path from 'path'
+import fs from 'fs'
 import javascriptBarcodeReader from 'javascript-barcode-reader'
 
 const app: Express = express();
@@ -54,6 +55,7 @@ app.post('/scan', upload.single('file'), async (req: Request, res: Response) => 
         res.status(400).send({ msg: "file is not defined" })
     } else {
         let result =  await parsePDF(`${file.destination}${file.filename}`)
+        await fs.unlink(`${file.destination}${file.filename}`, () => {})
         res.status(200).send({ rawData: result.parsed, bankCode: result.bankCode })
     }
 });
@@ -77,10 +79,13 @@ app.post('/barcode', upload.single('file'), async (req: Request, res: Response) 
                     singlePass: false
                   }
               })
+              
               res.status(200).send({bankCode: result})    
         } catch (error) {
             console.error(error)
             res.status(200).send({bankCode: null})    
+        } finally {
+            await fs.unlink(`${file.destination}${file.filename}`, () => {})
         }
         
     }
